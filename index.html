@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Запись в ветеринарную клинику</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --stars: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"><polygon points="20,2 23,14 36,14 25,22 29,34 20,26 11,34 15,22 4,14 17,14" fill="%23ffb6d9" fill-opacity="0.22" /></svg>');
+      --bg: #fff5f8;
+      --card: #fff; 
+      --accent: #ffbfd3;
+      --accent-2: #ffc9dd;
+      --text: #333;
+      --muted: #6b6b6b;
+      --success: #2f8f6a;
+      --danger: #d9534f;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      background-image: var(--stars); background-repeat: repeat; background-size: 90px 90px;
+      margin:0;min-height:100vh;background:linear-gradient(180deg,var(--bg),#ffeef6 60%);color:var(--text);
+      display:flex;align-items:center;justify-content:center;padding:28px;
+    }
+    .wrap{
+      width:100%;max-width:980px;display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start;
+    }
+    .hero{
+      background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.95));
+      border-radius:16px;padding:28px;padding-bottom:22px;box-shadow:0 6px 30px rgba(255,193,214,0.15);border:1px solid rgba(255,182,200,0.35);
+    }
+    h1{margin:0 0 8px;font-size:24px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+
+    form{
+      display:grid;gap:12px;
+    }
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    .input, select, input[type="date"], input[type="time"]{
+      width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(200,150,170,0.25);background:transparent;font-size:15px
+    }
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#5a132b;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(255,182,200,0.25)
+    }
+    .small{font-size:13px;color:var(--muted)}
+
+    .card{
+      background:var(--card);border-radius:14px;padding:16px;box-shadow:0 6px 20px rgba(200,160,180,0.06);border:1px solid rgba(200,160,180,0.08);
+    }
+
+    .list{max-height:520px;overflow:auto;padding:8px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;text-align:left;border-bottom:1px dashed rgba(220,200,210,0.5);font-size:14px}
+    th{font-size:13px;color:var(--muted)}
+
+    .muted{color:var(--muted);font-size:13px}
+    .actions button{margin-right:6px}
+
+    .hidden{display:none}
+
+    @media (max-width:880px){
+      .wrap{grid-template-columns:1fr;}
+    }
+    /* Added stars background */
+  body {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"><polygon points="20,2 23,14 36,14 25,22 29,34 20,26 11,34 15,22 4,14 17,14" fill="%23ffb6d9" fill-opacity="0.18" /></svg>');
+    background-repeat: repeat;
+    background-size: 85px 85px;
+  }
+</style>
+  <style>
+    .sticker{
+      position:fixed;
+      width:110px;
+      opacity:0.75;
+      pointer-events:none;
+      z-index:10;
+    }
+    .sticker.tl{top:10px;left:10px;}
+    .sticker.tr{top:10px;right:10px;}
+    .sticker.bl{bottom:10px;left:10px;}
+    .sticker.br{bottom:10px;right:10px;}
+  </style>
+</head>
+<body>
+  <!-- Cute stickers around the screen -->
+  <img class="sticker tl" src="https://cdn-icons-png.flaticon.com/256/620/620851.png">
+  <img class="sticker tr" src="https://cdn-icons-png.flaticon.com/256/1998/1998610.png">
+  <img class="sticker bl" src="https://cdn-icons-png.flaticon.com/256/3047/3047928.png">
+  <img class="sticker br" src="https://cdn-icons-png.flaticon.com/256/620/620852.png">
+  <div class="wrap">
+    <main class="hero card">
+      <h1>Запись в ветеринарную клинику</h1>
+      <p class="lead">Быстрая и простая запись для ваших питомцев.</p>
+
+      <form id="bookingForm">
+        <div>
+          <label for="petName">Имя животного</label>
+          <input id="petName" class="input" type="text" placeholder="Например: Мурзик" required>
+        </div>
+
+        <div>
+          <label for="breed">Порода</label>
+          <input id="breed" class="input" type="text" placeholder="Например: Британец / Метис" required>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="ownerPhone">Номер хозяина</label>
+            <input id="ownerPhone" class="input" type="tel" placeholder="+7 --- --- -- --" pattern="\\+?[0-9\s()-]{7,20}" required>
+          </div>
+          <div>
+            <label for="date">Дата</label>
+            <input id="date" class="input" type="date" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="time">Время</label>
+            <input id="time" class="input" type="time" required>
+          </div>
+          <div>
+            <label for="type">Тип животного</label>
+            <select id="type" class="input">
+              <option value="Кошка">Кошка</option>
+              <option value="Собака">Собака</option>
+              <option value="Другое">Другое</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="otherTypeContainer" class="hidden">
+          <label for="otherType">Укажите вид животного</label>
+          <input id="otherType" class="input" type="text" placeholder="Например: слон, хорёк...">
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:8px;align-items:center">
+          <button class="btn" type="submit">Записать питомца</button>
+          <div class="small muted">Нажмите, чтобы добавить запись в список ниже</div>
+        </div>
+      </form>
+
+    <aside class="card">
+      <h3 style="margin-top:0">Ближайшие свободные записи</h3>
+      <ul id="freeSlots" class="small" style="margin:0 0 16px 0; padding-left:18px; line-height:1.45"></ul>
+      <hr style="margin:14px 0;border:none;border-top:1px solid rgba(220,200,210,0.6)">
+      
+      <h3 style="margin-top:0">Инструкция</h3>
+      <ol style="padding-left:18px">
+        <li class="small">Заполните форму и нажмите «Записать питомца».</li>
+        <li class="small">Если выбрали «Другое», появится поле для ввода вида питомца.</li>
+        <li class="small">Записи будут видны справа и сохраняются в вашем браузере.</li>
+      </ol>
+
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button id="clearAll" class="btn" style="padding:8px 10px;font-size:13px">Очистить все</button>
+        <button id="exportCSV" class="btn" style="padding:8px 10px;font-size:13px">Экспорт CSV</button>
+      </div>
+
+  <script>
+    // Elements
+    const form = document.getElementById('bookingForm');
+    const type = document.getElementById('type');
+    const otherTypeContainer = document.getElementById('otherTypeContainer');
+    const otherTypeInput = document.getElementById('otherType');
+    const appointmentsList = document.getElementById('appointmentsList');
+    const clearAllBtn = document.getElementById('clearAll');
+    const exportBtn = document.getElementById('exportCSV');
+
+    // Local storage key
+    const STORAGE_KEY = 'vet_appointments_v1';
+
+    // Load
+    let appointments = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+    // Show or hide "other" field
+    type.addEventListener('change', ()=>{
+      if(type.value === 'Другое'){
+        otherTypeContainer.classList.remove('hidden');
+        otherTypeInput.required = true;
+      } else {
+        otherTypeContainer.classList.add('hidden');
+        otherTypeInput.required = false;
+      }
+    });
+
+    // Render appointments
+    function render(){
+      if(appointments.length === 0){
+        appointmentsList.innerHTML = '<div class="muted">Список пуст — добавьте запись через форму.</div>';
+        return;
+      }
+      let html = '<table><thead><tr><th>Имя</th><th>Порода</th><th>Вид</th><th>Дата</th><th>Владелец</th><th></th></tr></thead><tbody>';
+      appointments.forEach((a, idx) => {
+        html += `<tr>
+          <td>${escapeHtml(a.petName)}</td>
+          <td>${escapeHtml(a.breed)}</td>
+          <td>${escapeHtml(a.animalType)}</td>
+          <td>${escapeHtml(a.date)} ${escapeHtml(a.time)}</td>
+          <td>${escapeHtml(a.ownerPhone)}</td>
+          <td class="actions"><button data-idx="${idx}" class="btn" style="padding:6px 8px;font-size:13px">Удалить</button></td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      appointmentsList.innerHTML = html;
+
+      // attach delete handlers
+      appointmentsList.querySelectorAll('button[data-idx]').forEach(btn => {
+        btn.addEventListener('click', ()=>{
+          const i = Number(btn.getAttribute('data-idx'));
+          if(confirm('Удалить эту запись?')){
+            appointments.splice(i,1);
+            saveAndRender();
+          }
+        });
+      });
+    }
+
+    function saveAndRender(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appointments));
+      render();
+    }
+
+    // Escape helper to avoid injection in DOM
+    function escapeHtml(text){
+      if(!text) return '';
+      return String(text)
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#39;");
+    }
+
+    // Form submit
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const petName = document.getElementById('petName').value.trim();
+      const breed = document.getElementById('breed').value.trim();
+      const ownerPhone = document.getElementById('ownerPhone').value.trim();
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      let animalType = type.value;
+      if(animalType === 'Другое') animalType = otherTypeInput.value.trim() || 'Другое';
+
+      if(!petName || !breed || !ownerPhone || !date || !time){
+        alert('Пожалуйста, заполните все обязательные поля.');
+        return;
+      }
+
+      const newRec = {petName, breed, ownerPhone, date, time, animalType, created: new Date().toISOString()};
+      appointments.push(newRec);
+      saveAndRender();
+
+      form.reset();
+      otherTypeContainer.classList.add('hidden');
+      alert('Запись успешно добавлена!');
+    });
+
+    // Clear all
+    clearAllBtn.addEventListener('click', ()=>{
+      if(confirm('Очистить все записи?')){
+        appointments = [];
+        saveAndRender();
+      }
+    });
+
+    // Export CSV
+    exportBtn.addEventListener('click', ()=>{
+      if(appointments.length === 0){ alert('Нет данных для экспорта.'); return; }
+      const header = ['Имя животного','Порода','Вид','Дата','Время','Номер хозяина','Создано'];
+      const rows = appointments.map(a=>[
+        csvSafe(a.petName),csvSafe(a.breed),csvSafe(a.animalType),csvSafe(a.date),csvSafe(a.time),csvSafe(a.ownerPhone),csvSafe(a.created)
+      ]);
+      const csvContent = [header, ...rows].map(r=>r.join(',')).join('\n');
+      const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'vet_appointments.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    function csvSafe(s){
+      if(s == null) return '';
+      const str = String(s).replace(/"/g,'""');
+      if(str.search(/[,"\n]/) >= 0) return '"'+str+'"';
+      return str;
+    }
+
+    // Generate free slots
+    function generateFreeSlots(){
+      const list = document.getElementById('freeSlots');
+      const now = new Date();
+      const slots = [];
+      for(let i=1;i<=5;i++){
+        const d = new Date(now.getTime() + i*86400000);
+        const date = d.toISOString().split('T')[0];
+        slots.push(`📅 ${date} — 10:00, 12:00, 15:30`);
+      }
+      list.innerHTML = slots.map(s=>`<li>${s}</li>`).join('');
+    }
+
+    generateFreeSlots();
+
+    // Initial render
+    render();
+
+    // Auto-set date to today by default
+    (function setDefaultDate(){
+      const dateEl = document.getElementById('date');
+      const today = new Date().toISOString().split('T')[0];
+      if(!dateEl.value) dateEl.value = today;
+    })();
+  </script>
+  <div style="position:fixed; bottom:10px; right:14px; font-size:13px; color:rgba(90,20,40,0.45); pointer-events:none;">A.clinic</div>
+  <div style="position:fixed; bottom:10px; right:14px; font-size:13px; color:rgba(90,20,40,0.45); pointer-events:none;">A.clinic</div>
+</body>
+</html>
